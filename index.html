@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>I love you</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: #000;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="heart" width="800" height="800"></canvas>
+    <audio id="music" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+<button id="btn">▶ Включить музыку</button>
+    <script>
+      const canvas = document.getElementById("heart");
+      const ctx = canvas.getContext("2d");
+
+      ctx.translate(400, 400);
+      ctx.fillStyle = "#ffb6c1";
+      ctx.font = "bold 8px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      const TOTAL = 120;
+      const PI = Math.PI;
+
+      const points = [];
+      for (let scale = 11; scale < 17; scale++) {
+        for (let i = 0; i < TOTAL; i++) {
+          const angle = (i * (PI * 2)) / TOTAL;
+
+          const x = 16 * Math.pow(Math.sin(angle), 3) * scale;
+          const y =
+            -(
+              13 * Math.cos(angle) -
+              5 * Math.cos(2 * angle) -
+              2 * Math.cos(3 * angle) -
+              Math.cos(4 * angle)
+            ) * scale;
+
+          points.push({ x: x, y: y, angle: angle });
+        }
+      }
+
+      let index = 0;
+      const timer = setInterval(function () {
+        if (index >= points.length) {
+          clearInterval(timer);
+          return;
+        }
+
+        const p = points[index];
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(-p.angle + PI / 2);
+        ctx.fillText("I love you", 0, 0);
+        ctx.restore();
+
+        index++;
+      }, 25);
+      const btn = document.getElementById('btn');
+const music = document.getElementById('music');
+btn.addEventListener('click', function () {
+    if (music.paused) {
+        music.play();
+        btn.textContent = '⏸ Пауза';
+    } else {
+        music.pause();
+        btn.textContent = '▶ Включить музыку';
+    }
+});
+    </script>
+  </body>
+</html>
